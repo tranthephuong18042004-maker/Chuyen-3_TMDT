@@ -1,6 +1,4 @@
-# =========================
-# CLEAN DATA - TMĐT
-# =========================
+#=======làm sạch dữ liệu =========================
 
 import pandas as pd
 
@@ -11,9 +9,7 @@ def clean_data(input_file, output_file):
 
     print("Dữ liệu ban đầu:", df.shape)
 
-    # =========================
-    # 1. CLEANING
-    # =========================
+    #===== xử lý dữ liệu =========================
 
     # Xóa khoảng trắng tên cột
     df.columns = df.columns.str.strip()
@@ -24,9 +20,7 @@ def clean_data(input_file, output_file):
     # Xóa dữ liệu thiếu
     df = df.dropna()
 
-    # =========================
-    # 2. XỬ LÝ KIỂU DỮ LIỆU
-    # =========================
+   #====== xử lý kiểu dữ liệu =========================
 
     df["Order Date"] = pd.to_datetime(df["Order Date"], errors="coerce")
     df["Sales"] = pd.to_numeric(df["Sales"], errors="coerce")
@@ -37,25 +31,19 @@ def clean_data(input_file, output_file):
     # Xóa dữ liệu bất thường
     df = df[df["Sales"] > 0]
 
-    # =========================
-    # 3. FEATURE ENGINEERING
-    # =========================
+   #====== FEATURE ENGINEERING =========================
 
     df["Year"] = df["Order Date"].dt.year
     df["Month"] = df["Order Date"].dt.month
 
     print("Sau khi làm sạch:", df.shape)
 
-    # =========================
-    # 4. LƯU FILE
-    # =========================
+    #====== lưu file ==========================
 
     df.to_csv(output_file, index=False, encoding='utf-8-sig')
     print(f"Đã lưu file sạch: {output_file}")
 
 
-# =========================
-# RUN
-# =========================
+#===== chạy hàm làm sạch dữ liệu =========================
 if __name__ == "__main__":
     clean_data("superstore_cleaned.csv", "superstore_final.csv")
