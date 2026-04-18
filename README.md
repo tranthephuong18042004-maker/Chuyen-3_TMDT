@@ -36,8 +36,6 @@ Tỷ lệ dữ liệu giữ lại: 100%
 Dataset có chất lượng tốt, không có dữ liệu thiếu hoặc trùng lặp đáng kể, phù hợp để phân tích trực tiếp.
 ## ⚙️ Công nghệ sử dụng
 
-## ⚙️ Công nghệ sử dụng
-
 ### 🐍 Python
 
 Ngôn ngữ lập trình chính của dự án. Python được lựa chọn nhờ:
