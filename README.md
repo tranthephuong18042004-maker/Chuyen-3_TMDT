@@ -36,7 +36,7 @@ Nguồn: Kaggle (Superstore Dataset)
 Dataset có chất lượng tốt, không có dữ liệu thiếu hoặc trùng lặp đáng kể, phù hợp để phân tích trực tiếp.
 ## ⚙️ Công nghệ sử dụng
 
-### 🐍 Python
+###  Python
 
 Ngôn ngữ lập trình chính của dự án. Python được lựa chọn nhờ:
 
@@ -172,7 +172,7 @@ ReportLab → Báo cáo PDF
 
 ### 📄 File: `clean.py`
 
-### 🎯 Mục tiêu
+Mục tiêu
 
 Biến dữ liệu thô (raw data) thành dữ liệu sạch (clean data) để phục vụ phân tích và xây dựng mô hình.
 
@@ -296,38 +296,39 @@ df["Month"] = df["Order Date"].dt.month
 
 ### 🔹 Bước 4: Dữ liệu sau khi làm sạch
 
-👉 Dataset cuối cùng (`superstore_final.csv`) có dạng:
+Dataset cuối: superstore_final.csv
 
-| Order ID | Order Date | Product Name | Region | Sales | Year | Month |
-| -------- | ---------- | ------------ | ------ | ----- | ---- | ----- |
+Order ID	Order Date	Product Name	Region	Sales	Year	Month
+📊 Thống kê sau khi làm sạch
+Chỉ số	Giá trị
+Số dòng ban đầu	9,994
+Số dòng sau clean	9,994
+Số dòng bị loại bỏ	0
+Tỷ lệ giữ lại	100%
+🧩 Số lượng cột
+Trạng thái	Số cột
+Ban đầu	5
+Sau clean	7
+Tăng thêm	+2
+💡 Ý nghĩa các cột mới
+Cột	Vai trò
+Year	Lọc dữ liệu theo năm
+Month	Phân tích xu hướng theo tháng
+🎯 Tổng kết
+Dữ liệu ban đầu: 9,994 dòng
+Dữ liệu sau clean: 9,994 dòng
+Dữ liệu bị loại bỏ: 0 dòng
+Số cột: 5 → 7
+🏆 Nhận xét
+Dataset có chất lượng tốt, ít lỗi
+Quy trình làm sạch giúp đảm bảo dữ liệu đáng tin cậy
+Feature Engineering giúp nâng cao khả năng phân tích
 
----
+👉 Dữ liệu sau khi xử lý đã sẵn sàng cho:
 
-## 🎯 TÓM TẮT THAY ĐỔI
-
-```text
-Trước:
-5 cột (raw data)
-
-Sau:
-7 cột (clean + feature)
-```
-
----
-
-## 💡 Ý NGHĨA CỦA VIỆC THÊM CỘT
-
-| Cột   | Vai trò                      |
-| ----- | ---------------------------- |
-| Year  | Lọc dữ liệu theo năm         |
-| Month | Phân tích xu hướng doanh thu |
-
-👉 Nếu không có 2 cột này:
-
-* ❌ Không vẽ được biểu đồ theo tháng
-* ❌ Dashboard không lọc được
-
----
+📊 Phân tích dữ liệu (EDA)
+📈 Trực quan hóa (Visualization)
+🤖 Xây dựng mô hình dự báo (Machine Learning)
 
 ## 🏆 KẾT LUẬN
 
