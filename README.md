@@ -1,981 +1,302 @@
-# 📊 ĐỒ ÁN PHÂN TÍCH DỮ LIỆU TMĐT
+# HE THONG PHAN TICH DU LIEU THUONG MAI DIEN TU VA DU BAO DOANH THU
 
-## 📌 Giới thiệu
+## 1. Gioi thieu
 
-Dự án xây dựng hệ thống **phân tích dữ liệu thương mại điện tử (TMĐT)** bằng Python, bao gồm:
+Du an xay dung mot he thong phan tich du lieu thuong mai dien tu hoan chinh, bao gom cac thanh phan:
 
-* Làm sạch dữ liệu
-* Phân tích và trực quan hóa
-* Xây dựng dashboard
-* Dự báo doanh thu
+* Lam sach du lieu
+* Phan tich du lieu
+* Truc quan hoa
+* Dashboard tuong tac
+* Du bao doanh thu bang Machine Learning
+
+He thong giup doanh nghiep:
+
+* Hieu ro hieu suat kinh doanh
+* Phan tich hanh vi khach hang
+* Dua ra du bao doanh thu
+* Ho tro quyet dinh chien luoc
 
 ---
 
-## 📂 Cấu trúc project
+## 2. Cau truc thu muc
 
 ```
-Chuyen de 3/
+CHUYEN DE 3/
 │
-├── 📂 dữ liệu/
-│ ├── superstore_cleaned.csv # Dữ liệu gốc (raw data)
-│ └── superstore_final.csv # Dữ liệu sau khi làm sạch
+├── data/
+│   ├── superstore_cleaned.csv
+│   └── superstore_final.csv
 │
-├── 📂 hình ảnh/
-│ ├── trend.png # Biểu đồ xu hướng doanh thu
-│ ├── top.png # Top sản phẩm bán chạy
-│ ├── region.png # Doanh thu theo khu vực
-│ └── forecast.png # Biểu đồ dự báo
+├── images/
 │
-├── 📂 báo cáo/
-│ └── report_2026-04-13.pdf # Báo cáo tổng hợp
+├── reports/
 │
-├── clean.py # Xử lý và làm sạch dữ liệu
-├── analysis.py # Phân tích dữ liệu (EDA + Model)
-├── dashboard.py # Dashboard trực quan (Streamlit)
+├── analysis.py
+├── app.py
+├── charts.py
+├── clean.py
+├── model.py
 │
-└── README.md # Mô tả dự án
-```
----
-📂 Dataset
-Nguồn: Kaggle (Superstore Dataset)
-* Số lượng bản ghi ban đầu: 9994 dòng
-* Số lượng sau khi làm sạch: 9994 dòng
-* Số dòng bị loại bỏ: 0 dòng
-* Tỷ lệ dữ liệu giữ lại: 100%
-
-👉 Nhận xét:
-Dataset có chất lượng tốt, không có dữ liệu thiếu hoặc trùng lặp đáng kể, phù hợp để phân tích trực tiếp.
-## ⚙️ Công nghệ sử dụng
-
-###  Python
-
-Ngôn ngữ lập trình chính của dự án. Python được lựa chọn nhờ:
-
-* Cú pháp đơn giản, dễ đọc
-* Hỗ trợ mạnh mẽ cho phân tích dữ liệu
-* Có nhiều thư viện phục vụ Data Science
-
-👉 Toàn bộ hệ thống (cleaning, analysis, dashboard, model) đều được xây dựng bằng Python.
-
----
-
-### 📊 Pandas & NumPy
-
-#### 🔹 Pandas
-
-Thư viện xử lý dữ liệu dạng bảng (DataFrame), được sử dụng để:
-
-* Đọc và ghi file CSV
-* Làm sạch dữ liệu (dropna, drop_duplicates)
-* Xử lý thời gian (datetime)
-* Nhóm dữ liệu (groupby) để tính toán doanh thu
-
-#### 🔹 NumPy
-
-Thư viện xử lý số học, hỗ trợ:
-
-* Tạo biến thời gian cho mô hình (`np.arange`)
-* Tính toán nhanh và tối ưu hiệu suất
-
----
-
-### 📈 Matplotlib & Seaborn
-
-Hai thư viện trực quan hóa dữ liệu:
-
-#### 🔹 Matplotlib
-
-* Vẽ biểu đồ cơ bản
-* Tùy chỉnh chi tiết (trục, tiêu đề, legend)
-
-#### 🔹 Seaborn
-
-* Xây dựng trên Matplotlib
-* Giao diện đẹp, chuyên nghiệp hơn
-* Dùng để vẽ:
-
-  * Line chart (xu hướng doanh thu)
-  * Bar chart (top sản phẩm)
-  * Boxplot (nếu mở rộng)
-
-👉 Giúp chuyển dữ liệu thành hình ảnh dễ hiểu.
-
----
-
-### 🤖 Scikit-learn (Machine Learning)
-
-Thư viện Machine Learning phổ biến trong Python.
-
-#### Mô hình sử dụng:
-
-* **Linear Regression**
-
-  * Dùng để dự đoán xu hướng doanh thu theo thời gian
-  * Dễ triển khai, phù hợp dữ liệu cơ bản
-
-* (Mở rộng) Random Forest
-
-  * Mô hình nâng cao giúp cải thiện độ chính xác
-
-👉 Giúp hệ thống không chỉ phân tích mà còn dự đoán.
-
----
-
-### 📊 Streamlit (Dashboard)
-
-Framework tạo web app bằng Python.
-
-Được sử dụng để:
-
-* Xây dựng dashboard tương tác
-* Hiển thị:
-
-  * KPI (doanh thu, đơn hàng)
-  * Biểu đồ
-  * Bảng dữ liệu
-* Tạo bộ lọc:
-
-  * Theo năm
-  * Theo khu vực
-  * Theo sản phẩm
-
-👉 Giúp người dùng dễ dàng tương tác với dữ liệu mà không cần code.
-
----
-
-### 📄 ReportLab (Xuất PDF)
-
-Thư viện tạo file PDF tự động.
-
-Được sử dụng để:
-
-* Xuất báo cáo từ dashboard
-* Chèn:
-
-  * KPI
-  * Biểu đồ
-  * Nội dung phân tích
-* Tự động đặt tên file theo ngày
-
-👉 Giúp tự động hóa báo cáo giống hệ thống doanh nghiệp.
-
----
-
-## 🎯 Tổng kết
-
-Các công nghệ được kết hợp tạo thành một hệ thống hoàn chỉnh:
-
-```text
-Python → Xử lý dữ liệu
-Pandas → Làm sạch & phân tích
-Seaborn → Trực quan hóa
-Scikit-learn → Dự báo
-Streamlit → Dashboard
-ReportLab → Báo cáo PDF
+└── README.md
 ```
 
-👉 Hệ thống đáp ứng đầy đủ quy trình:
-**Data Cleaning → Analysis → Visualization → Modeling → Reporting**
+Mo ta:
+
+* data: chua du lieu dau vao va du lieu sau khi lam sach
+* images: luu tat ca bieu do duoc sinh ra tu qua trinh phan tich
+* reports: luu bao cao PDF va ket qua danh gia mo hinh
+* clean.py: xu ly va lam sach du lieu
+* analysis.py: phan tich du lieu va danh gia mo hinh
+* charts.py: dinh nghia cac ham ve bieu do
+* app.py: dashboard Streamlit
+* model.py: mo rong xu ly mo hinh (neu su dung)
+* README.md: mo ta du an
 
 ---
 
-## 🧹 1. Làm sạch dữ liệu
+## 3. Dataset
 
-### 📄 File: `clean.py`
+Du lieu su dung: Superstore Dataset
 
-Mục tiêu
+Thong tin:
 
-Biến dữ liệu thô (raw data) thành dữ liệu sạch (clean data) để phục vụ phân tích và xây dựng mô hình.
+* Du lieu giao dich ban hang
+* Bao gom cac truong:
 
----
+  * Order ID
+  * Order Date
+  * Product Name
+  * Category
+  * Sales
+  * Profit
+  * Customer Name
+  * Region
+  * Segment
 
-## 🔄 QUY TRÌNH BIẾN ĐỔI DỮ LIỆU
+Sau khi lam sach:
 
----
-
-### 🔹 Bước 1: Dữ liệu ban đầu
-
-Dữ liệu gốc (`superstore_cleaned.csv`) có dạng:
-
-| Order ID | Order Date | Product Name | Region | Sales |
-| -------- | ---------- | ------------ | ------ | ----- |
-
-👉 Vấn đề có thể gặp:
-
-* Có dòng trùng
-* Có giá trị thiếu
-* Dữ liệu ngày dạng chuỗi (string)
-* Sales có thể không phải số
+* Du lieu hop le, khong co gia tri null quan trong
+* Co them cac cot thoi gian phuc vu phan tich
 
 ---
 
-### 🔹 Bước 2: Làm sạch dữ liệu
+## 4. Cong nghe su dung
 
-#### ✔ Xóa dữ liệu trùng
-
-```python
-df = df.drop_duplicates()
-```
-
-👉 Loại bỏ các dòng bị lặp lại
-
----
-
-#### ✔ Xóa dữ liệu thiếu
-
-```python
-df = df.dropna()
-```
-
-👉 Loại bỏ các dòng có giá trị null
+* Python: ngon ngu lap trinh chinh
+* Pandas: xu ly du lieu
+* NumPy: tinh toan so hoc
+* Matplotlib, Seaborn: truc quan hoa du lieu
+* Scikit-learn: xay dung mo hinh machine learning
+* Prophet: du bao chuoi thoi gian
+* Streamlit: xay dung dashboard
+* ReportLab: xuat bao cao PDF
 
 ---
 
-#### ✔ Chuẩn hóa kiểu dữ liệu
+## 5. Quy trinh xu ly du lieu
 
-```python
-df["Order Date"] = pd.to_datetime(df["Order Date"], errors="coerce")
-df["Sales"] = pd.to_numeric(df["Sales"], errors="coerce")
-```
+### 5.1 Lam sach du lieu (clean.py)
 
-👉 Sau bước này:
+Cac buoc chinh:
 
-| Cột        | Trước        | Sau      |
-| ---------- | ------------ | -------- |
-| Order Date | string       | datetime |
-| Sales      | string/float | numeric  |
+* Xoa du lieu trung lap
+* Xoa du lieu thieu
+* Chuan hoa dinh dang du lieu:
 
----
+  * Order Date -> datetime
+  * Sales -> numeric
+* Loai bo du lieu khong hop le (Sales <= 0)
 
-#### ✔ Xóa dữ liệu lỗi
+Tao them cac cot:
 
-```python
-df = df.dropna(subset=["Order Date", "Sales"])
-df = df[df["Sales"] > 0]
-```
+* Year: phuc vu loc du lieu
+* Month: phuc vu phan tich xu huong
 
-👉 Loại bỏ:
+Ket qua:
 
-* Ngày lỗi (không parse được)
-* Sales ≤ 0
+* File superstore_final.csv
+* Anh bang du lieu
+* Bao cao PDF tu dong
 
 ---
 
-### 🔹 Bước 3: Tạo cột mới (Feature Engineering)
+### 5.2 Phan tich du lieu (analysis.py)
 
-👉 Đây là bước QUAN TRỌNG nhất 🔥
+Cac noi dung phan tich:
 
----
+* Doanh thu theo thang
+* Top san pham doanh thu cao
+* Doanh thu theo khu vuc
+* Doanh thu theo quy
+* Loi nhuan theo danh muc
+* Ty suat loi nhuan
+* Anh huong cua discount den profit
+* Phan khuc khach hang
+* Top khach hang
 
-#### ✔ Tạo cột Year
-
-```python
-df["Year"] = df["Order Date"].dt.year
-```
-
-👉 Ví dụ:
-
-| Order Date | Year |
-| ---------- | ---- |
-| 2017-06-12 | 2017 |
-
-👉 Mục đích:
-
-* Lọc dữ liệu theo năm
-* Dùng trong dashboard
+Tat ca bieu do duoc luu vao thu muc images.
 
 ---
 
-#### ✔ Tạo cột Month
+### 5.3 Machine Learning
 
-```python
-df["Month"] = df["Order Date"].dt.month
-```
-
-👉 Ví dụ:
-
-| Order Date | Month |
-| ---------- | ----- |
-| 2017-06-12 | 6     |
-
-👉 Mục đích:
-
-* Phân tích doanh thu theo tháng
-* Vẽ biểu đồ xu hướng
-
----
-
-### 🔹 Bước 4: Dữ liệu sau khi làm sạch
-
-Dataset cuối: superstore_final.csv
-
-Order ID	Order Date	Product Name	Region	Sales	Year	Month
-📊 Thống kê sau khi làm sạch
-| Chỉ số               | Giá trị |
-| -------------------- | ------- |
-| Số dòng ban đầu      | 9,994   |
-| Số dòng sau làm sạch | 9,994   |
-| Số dòng bị loại bỏ   | 0       |
-| Tỷ lệ giữ lại        | 100%    |
-
-🧩 Số lượng cột
-| Trạng thái | Số cột |
-| ---------- | ------ |
-| Ban đầu    | 5      |
-| Sau clean  | 7      |
-| Tăng thêm  | +2     |
-
-💡 Ý nghĩa các cột mới
-Cột	Vai trò
-Year	Lọc dữ liệu theo năm
-Month	Phân tích xu hướng theo tháng
-🎯 Tổng kết
-| Nội dung               | Giá trị    |
-| ---------------------- | ---------- |
-| Tổng dữ liệu ban đầu   | 9,994 dòng |
-| Tổng dữ liệu sau clean | 9,994 dòng |
-| Dữ liệu bị loại bỏ     | 0 dòng     |
-| Số cột                 | 5 → 7      |
-
-🏆 Nhận xét
-Dataset có chất lượng tốt, ít lỗi
-Quy trình làm sạch giúp đảm bảo dữ liệu đáng tin cậy
-Feature Engineering giúp nâng cao khả năng phân tích
-
-👉 Dữ liệu sau khi xử lý đã sẵn sàng cho:
-
-📊 Phân tích dữ liệu (EDA)
-📈 Trực quan hóa (Visualization)
-🤖 Xây dựng mô hình dự báo (Machine Learning)
-
-## 🏆 KẾT LUẬN
-
-Quá trình Data Cleaning đã:
-
-* Loại bỏ dữ liệu không hợp lệ
-* Chuẩn hóa dữ liệu
-* Tạo thêm đặc trưng (feature)
-
-👉 Giúp dữ liệu sẵn sàng cho:
-
-* Phân tích (EDA)
-* Trực quan hóa
-* Xây dựng mô hình dự báo
-
----
-
-## 📊 2. Phân tích dữ liệu
-
-### 📄 File: `analysis.py`
-
----
-
-## 🎯 Mục tiêu
-
-Thực hiện phân tích dữ liệu (EDA) và xây dựng mô hình dự báo nhằm:
-
-* Hiểu xu hướng bán hàng
-* Xác định sản phẩm nổi bật
-* Phân tích khu vực hiệu quả
-* Dự đoán doanh thu trong tương lai
-
----
-
-# 🔍 1. Phân tích doanh thu theo tháng
-
-### ✔ Cách thực hiện:
-
-```python
-monthly_sales = df.groupby("Month")["Sales"].sum()
-```
-
-👉 Nhóm dữ liệu theo tháng và tính tổng doanh thu
-
----
-
-### 📊 Kết quả:
-
-* Biểu đồ đường (Line chart)
-* Trục X: Tháng (1 → 12)
-* Trục Y: Doanh thu
-
----
-
-### 🎯 Ý nghĩa:
-
-* Xác định tháng bán chạy nhất
-* Phát hiện xu hướng theo thời gian
-* Hỗ trợ quyết định kinh doanh (khuyến mãi, nhập hàng)
-
----
-
----
-
-# 🔥 2. Top sản phẩm bán chạy
-
-### ✔ Cách thực hiện:
-
-```python
-top_products = df.groupby("Product Name")["Sales"].sum().sort_values(ascending=False)
-```
-
----
-
-### 📊 Kết quả:
-
-* Biểu đồ cột (Bar chart)
-* Hiển thị Top 10 sản phẩm
-
----
-
-### 🎯 Ý nghĩa:
-
-* Xác định sản phẩm chủ lực
-* Tập trung marketing vào sản phẩm bán tốt
-* Loại bỏ sản phẩm kém hiệu quả
-
----
-
----
-
-# 🌍 3. Doanh thu theo khu vực
-
-### ✔ Cách thực hiện:
-
-```python
-region_sales = df.groupby("Region")["Sales"].sum()
-```
-
----
-
-### 📊 Kết quả:
-
-* Biểu đồ tròn (Pie chart)
-* Tỷ lệ doanh thu theo từng khu vực
-
----
-
-### 🎯 Ý nghĩa:
-
-* Biết khu vực nào mang lại doanh thu cao
-* Tối ưu chiến lược phân phối
-* Phát hiện thị trường tiềm năng
-
----
-
----
-
-# 🤖 4. Dự báo doanh thu (Machine Learning)
-
----
-
-## ✔ Chuẩn bị dữ liệu
-
-```python
-df = df.sort_values("Order Date")
-df["Time"] = np.arange(len(df))
-```
-
-👉 Tạo biến `Time` để biểu diễn dòng thời gian
-
----
-
-## ✔ Xây dựng mô hình
-
-```python
-model = LinearRegression()
-model.fit(X, y)
-```
-
-* X = Time (biến độc lập)
-* y = Sales (biến phụ thuộc)
-
----
-
-## ✔ Dự đoán
-
-```python
-pred = model.predict(X)
-```
-
----
-
-## 📊 Kết quả:
-
-* Biểu đồ:
-
-  * Đường thực tế
-  * Đường dự đoán
-
----
-
-## 🎯 Ý nghĩa:
-
-* Dự đoán xu hướng doanh thu
-* Hỗ trợ lập kế hoạch kinh doanh
-* Hiểu xu hướng tăng/giảm
-
----
-
----
-
-# 📏 5. Đánh giá mô hình
-
----
-
-## ✔ MAE (Mean Absolute Error)
-
-```python
-MAE = mean_absolute_error(y, pred)
-```
-
-👉 Công thức:
-
-```text
-MAE = trung bình |y - y_pred|
-```
-
-### 🎯 Ý nghĩa:
-
-* Sai số trung bình giữa giá trị thực và dự đoán
-* Dễ hiểu, trực quan
-
-👉 Ví dụ:
-
-```text
-MAE = 50 → sai lệch trung bình 50 đơn vị doanh thu
-```
-
----
-
-## ✔ RMSE (Root Mean Squared Error)
-
-```python
-RMSE = sqrt(mean_squared_error(y, pred))
-```
-
-👉 Công thức:
-
-```text
-RMSE = sqrt((y - y_pred)^2)
-```
-
----
-
-### 🎯 Ý nghĩa:
-
-* Phạt nặng sai số lớn
-* Đánh giá độ chính xác mô hình tốt hơn MAE
-
----
-
-## 🔍 So sánh MAE vs RMSE
-
-| Chỉ số | Ý nghĩa           |
-| ------ | ----------------- |
-| MAE    | Sai số trung bình |
-| RMSE   | Nhạy với lỗi lớn  |
-
----
-
-# 🏆 KẾT LUẬN
-
-Quá trình phân tích đã:
-
-✔ Xác định xu hướng doanh thu theo thời gian
-✔ Tìm ra sản phẩm bán chạy nhất
-✔ Phân tích hiệu quả theo khu vực
-✔ Xây dựng mô hình dự báo doanh thu
-
-👉 Hệ thống giúp:
-
-* Hỗ trợ ra quyết định kinh doanh
-* Tối ưu chiến lược bán hàng
-* Dự đoán xu hướng tương lai
-
----
-
-## 🔥 TỔNG QUY TRÌNH
-
-```text
-Data Cleaning → EDA → Visualization → Modeling → Evaluation
-```
-
-
----
-
-## 📈 3. Dashboard (Giao diện)
-
-### 📄 File: `dashboard.py`
-
----
-
-## 🎯 Mục tiêu
-
-Xây dựng hệ thống dashboard tương tác giúp:
-
-* Theo dõi tình hình kinh doanh
-* Phân tích dữ liệu trực quan
-* Hỗ trợ ra quyết định
-* Xuất báo cáo tự động
-
----
-
-# ⚙️ Công nghệ sử dụng
-
-* **Streamlit**: xây dựng giao diện web
-* **Pandas**: xử lý dữ liệu
-* **Seaborn / Matplotlib**: vẽ biểu đồ
-* **Scikit-learn**: mô hình dự báo
-* **ReportLab**: xuất báo cáo PDF
-
----
-
-# 🎛️ 1. Bộ lọc dữ liệu (Filter)
-
-### ✔ Chức năng:
-
-Cho phép người dùng lựa chọn dữ liệu cần phân tích:
-
-* Năm (`Year`)
-* Khu vực (`Region`)
-* Sản phẩm (`Product Name`)
-
----
-
-### ✔ Cách hoạt động:
-
-```python
-filtered_df = df[
-    (df["Year"] == selected_year) &
-    (df["Region"].isin(selected_regions))
-]
-```
-
-👉 Sau đó lọc tiếp theo sản phẩm
-
----
-
-### 🎯 Ý nghĩa:
-
-* Tăng tính tương tác
-* Phân tích theo từng nhóm dữ liệu cụ thể
-* Giống dashboard thực tế doanh nghiệp
-
----
-
-# 📊 2. KPI (Chỉ số tổng quan)
-
-### ✔ Bao gồm:
-
-| Chỉ số         | Ý nghĩa                    |
-| -------------- | -------------------------- |
-| Tổng doanh thu | Tổng Sales                 |
-| Số đơn hàng    | Số Order ID                |
-| Trung bình đơn | Giá trị trung bình mỗi đơn |
-
----
-
-### ✔ Cách tính:
-
-```python
-total_sales = df["Sales"].sum()
-total_orders = df["Order ID"].nunique()
-avg_sales = df["Sales"].mean()
-```
-
----
-
-### 🎯 Ý nghĩa:
-
-* Cung cấp cái nhìn nhanh về hiệu suất kinh doanh
-* Hỗ trợ ra quyết định nhanh
-
----
-
-# 📈 3. Biểu đồ trực quan
-
----
-
-## 🔹 Xu hướng doanh thu
-
-* Biểu đồ: Line chart
-* Trục X: Tháng
-* Trục Y: Doanh thu
-
-👉 Dùng để:
-
-* Phát hiện xu hướng tăng/giảm
-* Xác định mùa cao điểm
-
----
-
-## 🔹 Top sản phẩm
-
-* Biểu đồ: Bar chart
-* Hiển thị Top 10 sản phẩm
-
-👉 Dùng để:
-
-* Xác định sản phẩm bán chạy
-* Tối ưu chiến lược kinh doanh
-
----
-
-## 🔹 Doanh thu theo khu vực
-
-* Biểu đồ: Pie chart
-
-👉 Dùng để:
-
-* So sánh hiệu suất giữa các khu vực
-* Tìm thị trường tiềm năng
-
----
-
-## 🔹 Dự báo doanh thu
-
-* Biểu đồ:
-
-  * Đường thực tế
-  * Đường dự đoán
-
-👉 Dùng để:
-
-* Nhìn xu hướng tương lai
-* Hỗ trợ lập kế hoạch
-
----
-
-# 🤖 4. Mô hình dự báo
-
-### ✔ Sử dụng:
+Su dung 2 mo hinh chinh:
 
 * Linear Regression
 * Random Forest
 
----
+Quy trinh:
 
-### ✔ Quy trình:
+* Tao bien thoi gian (Time)
+* Train/Test split
+* Train model
+* Du doan doanh thu
 
-1. Sắp xếp dữ liệu theo thời gian
-2. Tạo biến `Time`
-3. Huấn luyện mô hình
-4. Dự đoán
+Danh gia mo hinh:
 
----
+* MAE
+* RMSE
+* R2 Score
 
-### 🎯 Ý nghĩa:
+Ket qua duoc luu vao:
 
-* Dự đoán doanh thu
-* So sánh độ chính xác giữa các mô hình
-
----
-
-# 📄 5. Xuất báo cáo PDF
-
-### ✔ Chức năng:
-
-* Xuất báo cáo tự động từ dashboard
-* Tự động đặt tên theo ngày
+reports/model_metrics.csv
 
 ---
 
-### ✔ Nội dung báo cáo:
+## 6. Dashboard (app.py)
 
-* KPI
-* Biểu đồ:
+Dashboard duoc xay dung bang Streamlit voi cac tinh nang:
 
-  * Xu hướng doanh thu
-  * Top sản phẩm
-  * Khu vực
-  * Dự báo
+### 6.1 Bo loc du lieu
 
----
-
-### 🎯 Ý nghĩa:
-
-* Tự động hóa báo cáo
-* Giống hệ thống BI thực tế
-* Tiết kiệm thời gian
+* Loc theo nam
+* Loc theo khu vuc
+* Lua chon bieu do hien thi
 
 ---
 
-# 🧩 6. Luồng hoạt động
+### 6.2 KPI tong quan
 
-```text
-Load Data → Filter → KPI → Chart → Model → Export PDF
+* Tong doanh thu
+* Tong loi nhuan
+* So don hang
+* Gia tri trung binh moi don
+
+---
+
+### 6.3 Bieu do phan tich
+
+* Doanh thu theo thang
+* Doanh thu theo quy
+* Top san pham
+* Doanh thu theo khu vuc
+
+---
+
+### 6.4 Machine Learning
+
+Su dung 3 mo hinh:
+
+* Linear Regression
+* Random Forest
+* Prophet
+
+Dashboard cung cap:
+
+* So sanh mo hinh
+* Hien thi chi so danh gia
+* Bieu do du bao
+
+---
+
+### 6.5 Bao cao du lieu
+
+* Hien thi bang du lieu
+* Tai file CSV truc tiep
+
+---
+
+## 7. Luong he thong
+
+```
+Du lieu goc
+    ->
+Lam sach du lieu (clean.py)
+    ->
+Du lieu sach
+    ->
+Phan tich va truc quan (analysis.py, charts.py)
+    ->
+Machine Learning
+    ->
+Dashboard (app.py)
+    ->
+Bao cao (PDF, CSV)
 ```
 
 ---
 
-# 🏆 KẾT LUẬN
+## 8. Huong dan chay du an
 
-Dashboard đã xây dựng thành công hệ thống:
+### Buoc 1: Cai dat thu vien
 
-✔ Tương tác dữ liệu
-✔ Trực quan hóa chuyên nghiệp
-✔ Tích hợp Machine Learning
-✔ Xuất báo cáo tự động
-
-👉 Hệ thống có thể áp dụng thực tế trong doanh nghiệp TMĐT để:
-
-* Theo dõi doanh thu
-* Phân tích hiệu quả sản phẩm
-* Dự báo xu hướng kinh doanh
-
----
-
-# 🚀 ĐIỂM MẠNH
-
-* Giao diện trực quan (Streamlit)
-* Dễ sử dụng
-* Tích hợp đầy đủ pipeline Data Analytics
-* Có khả năng mở rộng
-
-
-## 📑 4. Báo cáo (Report)
-
-### 📄 File:
-
-`report_2026-04-13.pdf`
-
----
-
-## 🎯 Mục tiêu
-
-Báo cáo được xuất tự động từ hệ thống dashboard nhằm:
-
-* Tổng hợp các chỉ số quan trọng
-* Trình bày kết quả phân tích dữ liệu
-* Hỗ trợ ra quyết định kinh doanh
-
----
-
-## 📊 Nội dung báo cáo
-
-### 🔹 1. Chỉ số tổng quan (KPI)
-
-* **Tổng doanh thu:** 484,247
-* **Số đơn hàng:** 969
-* **Trung bình mỗi đơn:** 242
-
-👉 Ý nghĩa:
-
-* Tổng doanh thu phản ánh hiệu suất kinh doanh
-* Số đơn hàng thể hiện mức độ hoạt động
-* Giá trị trung bình giúp đánh giá sức mua khách hàng
-
----
-
-### 🔹 2. Phân tích dữ liệu
-
-Báo cáo bao gồm các biểu đồ trực quan:
-
-#### 📈 Xu hướng doanh thu
-
-* Thể hiện doanh thu theo từng tháng
-* Giúp nhận diện xu hướng tăng/giảm
-
----
-
-#### 🔥 Top sản phẩm
-
-* Hiển thị các sản phẩm bán chạy nhất
-* Hỗ trợ quyết định về chiến lược sản phẩm
-
----
-
-#### 🌍 Doanh thu theo khu vực
-
-* So sánh hiệu suất giữa các khu vực
-* Xác định thị trường tiềm năng
-
----
-
-### 🔹 3. Dự báo doanh thu
-
-* Sử dụng mô hình **Linear Regression** và **Random Forest**
-* Biểu đồ gồm:
-
-  * Đường dữ liệu thực tế
-  * Đường dự đoán
-
-👉 Ý nghĩa:
-
-* Dự đoán xu hướng doanh thu trong tương lai
-* Hỗ trợ lập kế hoạch kinh doanh
-
----
-
-## ⚙️ Đặc điểm nổi bật
-
-* Báo cáo được tạo **tự động từ dashboard**
-* Cập nhật theo dữ liệu mới nhất
-* Định dạng rõ ràng, dễ đọc
-* Tích hợp đầy đủ:
-
-  * KPI
-  * Biểu đồ
-  * Dự báo
-
----
-
-## 🏆 Kết luận
-
-Báo cáo cung cấp cái nhìn toàn diện về hoạt động kinh doanh TMĐT, giúp:
-
-* Theo dõi hiệu suất
-* Phân tích xu hướng
-* Hỗ trợ ra quyết định
-
-👉 Đây là bước cuối trong quy trình:
-
-```text
-Data Cleaning → Analysis → Dashboard → Reporting
 ```
-
-
-## ▶️ Cách chạy project
-
-### 1. Cài thư viện
-
-```bash
-pip install pandas matplotlib seaborn numpy scikit-learn streamlit reportlab
+pip install pandas numpy matplotlib seaborn scikit-learn prophet streamlit reportlab
 ```
 
 ---
 
-### 2. Làm sạch dữ liệu
+### Buoc 2: Lam sach du lieu
 
-```bash
+```
 python clean.py
 ```
 
 ---
 
-### 3. Phân tích dữ liệu
+### Buoc 3: Phan tich du lieu
 
-```bash
+```
 python analysis.py
 ```
 
 ---
 
-### 4. Chạy dashboard
+### Buoc 4: Chay dashboard
 
-```bash
-streamlit run dashboard.py
+```
+streamlit run app.py
 ```
 
 ---
 
-## 📌 Kết quả đạt được
+## 9. Ket qua dat duoc
 
-* Xây dựng pipeline xử lý dữ liệu hoàn chỉnh
-* Trực quan hóa dữ liệu rõ ràng
-* Dự báo doanh thu cơ bản
-* Tạo dashboard tương tác
-* Xuất báo cáo PDF tự động
+* Xay dung pipeline xu ly du lieu hoan chinh
+* Truc quan hoa du lieu ro rang
+* Xay dung mo hinh du bao doanh thu
+* Dashboard tuong tac chuyen nghiep
+* Xuat bao cao tu dong
 
 ---
+
+## 10. Mo rong
+
+Co the phat trien them:
+
+* Ket noi co so du lieu thuc te
+* Trien khai len cloud
+* Them mo hinh deep learning
+* Xay dung API du lieu
+
+---
+
+## 11. Ket luan
+
+Du an mo ta day du quy trinh phan tich du lieu trong thuc te:
+
+Data Cleaning -> Analysis -> Visualization -> Modeling -> Dashboard -> Reporting
+
+He thong co the ap dung truc tiep trong bai toan thuong mai dien tu hoac mo rong sang cac linh vuc khac.
